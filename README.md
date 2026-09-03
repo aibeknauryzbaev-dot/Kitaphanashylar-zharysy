@@ -1,0 +1,2 @@
+# Kitaphanashylar-zharysy
+Kitaphanashylar zharysy
