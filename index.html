@@ -510,41 +510,29 @@
   buildRay(els.rayB, 'B');
 
   /* ---------------- Questions ---------------- */
-  /* Kazakh case-suffix tables for numbers 0..10, built per vowel-harmony /
-     consonant-type rules (sonorant/nasal/voiceless/vowel endings each take
-     a different suffix allomorph). Index = the number itself. */
-  const GEN = ['дің','дің','нің','тің','тің','тің','ның','нің','дің','дың','ның']; // "N-ның ..." (of N)
-  const ABL = ['ден','ден','ден','тен','тен','тен','дан','ден','ден','дан','нан']; // "N-тен ..." (from N)
-  const DAT = ['ге','ге','ге','ке','ке','ке','ға','ге','ге','ға','ға'];           // "N-ке ..." (to N)
-  const ACC = ['ді','ді','ні','ті','ті','ті','ны','ні','ді','ды','ды'];           // "N-ті ..." (N, as object)
-
-  const QUESTION_TYPES = ['neighborRight','neighborLeft','stepsForward','lessThan','addTo'];
+  /* Мәтінсіз, 1-сыныпқа арналған қысқа математикалық өрнектер. */
+  const QUESTION_TYPES = ['add','subtract','missingAddend','missingSubtrahend','compare'];
   function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
   function genQuestion(){
     const type = QUESTION_TYPES[Math.floor(Math.random()*QUESTION_TYPES.length)];
-    let n, k, text, answer;
+    let a, b, answer, text;
     switch(type){
-      case 'neighborRight':
-        n = randInt(0,9);
-        text = n + '-' + GEN[n] + ' оң жақтағы көршісі қандай сан?';
-        answer = n+1; break;
-      case 'neighborLeft':
-        n = randInt(1,10);
-        text = n + '-' + GEN[n] + ' сол жақтағы көршісі қандай сан?';
-        answer = n-1; break;
-      case 'stepsForward':
-        n = randInt(0,7); k = randInt(1, Math.min(3,10-n));
-        text = n + '-' + ABL[n] + ' ' + k + ' қадам алға қандай сан болады?';
-        answer = n+k; break;
-      case 'lessThan':
-        n = randInt(1,10);
-        text = n + '-' + ABL[n] + ' 1-ге кем қандай сан?';
-        answer = n-1; break;
-      case 'addTo':
-        n = randInt(0,7); k = randInt(1, Math.min(3,10-n));
-        text = n + '-' + DAT[n] + ' ' + k + '-' + ACC[k] + ' қосқанда қандай сан шығады?';
-        answer = n+k; break;
+      case 'add':
+        a = randInt(0,7); b = randInt(0,10-a);
+        text = a + ' + ' + b + ' = □'; answer = a+b; break;
+      case 'subtract':
+        a = randInt(1,10); b = randInt(0,a);
+        text = a + ' − ' + b + ' = □'; answer = a-b; break;
+      case 'missingAddend':
+        answer = randInt(0,7); b = randInt(0,10-answer);
+        text = '□ + ' + b + ' = ' + (answer+b); break;
+      case 'missingSubtrahend':
+        answer = randInt(0,10); a = randInt(answer,10);
+        text = a + ' − □ = ' + (a-answer); break;
+      case 'compare':
+        a = randInt(0,9); answer = a + 1;
+        text = a + ' < □'; break;
     }
     return {text, answer};
   }
